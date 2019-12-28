@@ -1,18 +1,27 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+ 
+
+<user-page v-if="type==='client'"></user-page>
+<worker-page v-else-if="type==='worker'"></worker-page>
+<main-page v-else></main-page>
+
 </template>
 
 <script>
-import HelloWorld from "./HelloWorld.vue";
-
+import MainPage from "./MainPage.vue";
+import UserPage from "./UserPage.vue";
+import WorkerPage from "./WorkerPage.vue";
+import { mapState } from "vuex";
 export default {
   name: "app",
   components: {
-    HelloWorld
-  }
+    MainPage,
+    UserPage,
+    WorkerPage,
+  },
+  computed: mapState({
+   type: state => state.login.type
+  }),
 };
 </script>
 
@@ -23,6 +32,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: grey;
   margin-top: 60px;
 }
 </style>

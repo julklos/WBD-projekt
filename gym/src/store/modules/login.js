@@ -3,83 +3,47 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-    user: [],
-    type: null
+    user: null,
+    type: null,
+    loading: false,
+    error: null
   }
   
   // getters
   const getters = {
-    cartProducts: (state, getters, rootState) => {
-      return state.items.map(({ id, quantity }) => {
-        const product = rootState.products.all.find(product => product.id === id)
-        return {
-          title: product.title,
-          price: product.price,
-          quantity
-        }
-      })
-    },
-  
-    cartTotalPrice: (state, getters) => {
-      return getters.cartProducts.reduce((total, product) => {
-        return total + product.price * product.quantity
-      }, 0)
-    }
+   
   }
   
   // actions
   const actions = {
-    checkout ({ commit, state }, products) {
-      const savedCartItems = [...state.items]
-      commit('setCheckoutStatus', null)
-      // empty cart
-      commit('setCartItems', { items: [] })
-      shop.buyProducts(
-        products,
-        () => commit('setCheckoutStatus', 'successful'),
-        () => {
-          commit('setCheckoutStatus', 'failed')
-          // rollback to the cart saved before sending the request
-          commit('setCartItems', { items: savedCartItems })
-        }
-      )
+    login ({ commit}, userData) {
+    commit('setUserData',userData)
+    commit('setUserType',"worker")
     },
-  
-    addProductToCart ({ state, commit }, product) {
-      commit('setCheckoutStatus', null)
-      if (product.inventory > 0) {
-        const cartItem = state.items.find(item => item.id === product.id)
-        if (!cartItem) {
-          commit('pushProductToCart', { id: product.id })
-        } else {
-          commit('incrementItemQuantity', cartItem)
-        }
-        // remove 1 item from stock
-        commit('products/decrementProductInventory', { id: product.id }, { root: true })
-      }
+    logout({commit}) {
+        commit('logout');
     }
   }
   
   // mutations
   const mutations = {
-    pushProductToCart (state, { id }) {
-      state.items.push({
-        id,
-        quantity: 1
-      })
+    setUserData (state, data) {
+        console.log(data)
+      state.user = data
     },
   
-    incrementItemQuantity (state, { id }) {
-      const cartItem = state.items.find(item => item.id === id)
-      cartItem.quantity++
+    setUserType (state, data) {
+        console.log(data)
+     state.type = data
     },
   
-    setCartItems (state, { items }) {
-      state.items = items
+    logout (state) {
+      state.user = null;
+      state.type = null;
     },
   
-    setCheckoutStatus (state, status) {
-      state.checkoutStatus = status
+    setLoadingStatus (state, status) {
+      state.loading = status
     }
   }
   
