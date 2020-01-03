@@ -1,12 +1,17 @@
 <template>
+<div>
   <worker-label></worker-label>
+  <clients-page></clients-page>
+</div>
 </template>
 
 <script>
 import WorkerLabel from "./WorkerLabel.vue"
+import ClientsPage from "./ClientsPage.vue"
 export default {
     components: {
-  WorkerLabel
+  WorkerLabel,
+  ClientsPage
   }
  }
 </script>

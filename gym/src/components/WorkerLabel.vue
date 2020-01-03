@@ -36,7 +36,6 @@ export default {
       logout: "login/logout"
     }),
     logOut(){
-      console.log('logout');
       this.logout()
     }
  }
@@ -44,8 +43,12 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.b-nav-item{
-color: rgba(255, 255, 255, 1);
+<style>
+
+   .navbar-dark .navbar-nav .nav-link{
+      color:black
+    }
+    .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
+    color: white;
 }
 </style>
