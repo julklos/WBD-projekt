@@ -47,24 +47,31 @@
                   >
                     <b-form-input
                       id="input-1"
-                      v-model="selected.first_name"
-                      placeholder="Enter email"
+                      v-model="selected.name"
+                      placeholder="Enter name"
                     ></b-form-input>
                   </b-form-group>
 
                   <b-form-group id="input-group-2" label="Last name:" label-for="input-2">
                     <b-form-input
                       id="input-2"
-                      v-model="selected.last_name"
+                      v-model="selected.lastName"
                       required
                       placeholder="Enter last name"
                     ></b-form-input>
                   </b-form-group>
 
-                  <b-form-group id="input-group-3" label="Age:" label-for="input-3">
+                  <b-form-group id="input-group-3" label="Email:" label-for="input-3">
                     <b-form-input
                       id="input-3"
-                      v-model="selected.age"
+                      v-model="selected.email"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                  <b-form-group id="input-group-4" label="Phone number:" label-for="input-4">
+                    <b-form-input
+                      id="input-4"
+                      v-model="selected.phoneNumber"
                       required
                     ></b-form-input>
                   </b-form-group>
@@ -138,12 +145,13 @@ export default {
     data() {
       return {
        search : "",
-        fields: [ 'age', 'first_name', 'last_name'],
+        fields: [ 'name', 'lastName', 'phoneNumber', 'email'],
         selected: undefined,
         newClient: {
-          age: "",
-          first_name: "",
-          last_name: ""
+          phoneNumber: "",
+          name: "",
+          lastName: "",
+          email: ""
         }
       }
     },
@@ -157,7 +165,7 @@ export default {
           return this.items
         else{
         return this.items.filter(element => {
-            if(element.first_name.toLowerCase().search(this.search.toLowerCase())>=0 ||element.last_name.toLowerCase().search(this.search.toLowerCase())>=0)
+            if(element.name.toLowerCase().search(this.search.toLowerCase())>=0 ||element.lastName.toLowerCase().search(this.search.toLowerCase())>=0)
                 return element;
           });
         }
@@ -172,11 +180,15 @@ export default {
     BContainer,
     BCol,BRow,BFormInput, BTable
   },
+  beforeMount() {
+    this.getClients(0);
+  },
    methods: {
      ...mapActions({
         addClient: 'clients/addClient',
         deleteClient: 'clients/deleteClient',
-        updateClient: 'clients/updateClient'
+        updateClient: 'clients/updateClient',
+        getClients: 'clients/getClients'
      }),
       onRowSelected(items) {
         this.selected = items[0]
@@ -188,6 +200,7 @@ export default {
         this.deleteClient(this.selected)
       },
       onSubmit(){
+    
         this.updateClient(this.selected)
       },
       showModal(name) {
@@ -197,9 +210,10 @@ export default {
       hideModal(name) {
         this.$refs[name].hide()
         if(name == 'add-modal'){
-          this.newClient.first_name = ""
-          this.newClient.last_name = ""
-          this.newClient.age = ""
+          this.newClient.name = ""
+          this.newClient.lastName = ""
+          this.newClient.email = ""
+          this.newClient.phoneNumber = ""
         }
       },
       addNewClient(event){
