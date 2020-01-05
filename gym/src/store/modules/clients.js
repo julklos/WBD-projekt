@@ -79,7 +79,7 @@ const actions = {
           pesel : client.pesel,
           birthDate : year+'-'+month+'-'+day
     }
-    console.log(address, newClient)
+
     axios.post(url+"addresses/", address,{
       headers:{
         
@@ -90,7 +90,6 @@ const actions = {
     })
     .then(function (response) {
       const addres = response.data._links.address.href
-      console.log(addres)
       newClient = {...newClient, address: addres, gym}
       dispatch('addClient',newClient)
      
@@ -100,7 +99,7 @@ const actions = {
     })
   },
   updateClient({commit, dispatch}, client){
-    console.log(client.phoneNumber)
+
     axios.patch(client._links.client.href, {
       name: client.name,
       lastName: client.lastName,

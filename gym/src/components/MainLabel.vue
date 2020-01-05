@@ -14,8 +14,8 @@
   @show="resetModal"
   @hidden="resetModal"
   @ok="handleOk">
-     <b-form-input :state="nameState" v-model="email" type="email" placeholder="Enter your email"></b-form-input>
-      <b-form-input :state="nameState" style="margin-top: 2%" v-model="password" type="password" placeholder="Enter your password"></b-form-input>
+     <b-form-input  v-model="email" type="email" placeholder="Enter your email"></b-form-input>
+      <b-form-input  style="margin-top: 2%" v-model="password" type="password" placeholder="Enter your password"></b-form-input>
        <b-form-invalid-feedback id="input-live-feedback">
       Incorrect email or password.
     </b-form-invalid-feedback>
@@ -28,14 +28,14 @@ import {mapActions,mapState} from 'vuex'
 export default {
     data() {
       return {
-        name: '',
+        email: '',
         submittedNames: [],
         password: ""
       }
     },
     computed: mapState({
     // arrow functions can make the code very succinct!
-    nameState: state => state.login.error
+   // nameState: state => state.login.error
     }),
     methods:{
     ...mapActions({

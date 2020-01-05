@@ -2,7 +2,7 @@
  
 
 <user-page v-if="type==='client'"></user-page>
-<worker-page v-else-if="type==='worker'"></worker-page>
+<worker-page v-else-if="type==='employee'"></worker-page>
 <main-page v-else></main-page>
 
 </template>
