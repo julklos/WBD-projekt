@@ -1,5 +1,6 @@
 
  const url = "http://lipol.me:8081/api/"
+ const gym = "http://lipol.me:8081/api/gyms/0"
  import axios from 'axios'
 // initial state
 // shape: [{ id, quantity }]
@@ -40,9 +41,63 @@ const actions = {
       console.log(error);
     })
   },
-  addClient ({commit}, newClient) {
-  
-    commit('addClient', newClient)
+  addClient({commit}, client){
+    console.log(client)
+    axios.post(url+"clients", client,{
+      headers:{
+        
+        "Access-Control-Allow-Origin": "*",
+        contentType: 'application/json'
+      },
+      
+    })
+    .then(function (response) {
+      console.log(response)
+      commit('addClient',client)
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+
+  },
+  addAddress ({dispatch}, {client, address}) {
+
+    const year = client.year.toString()
+    let month = client.month.toString()
+    let day = client.day.toString()
+    if(day.length== 1)
+          day = "0"+day
+    if(month.length== 1)
+          month = "0"+month
+    let newClient = {
+      phoneNumber: client.phoneNumber,
+          name: client.name,
+          lastName: client.lastName,
+          email: client.email,
+          sex : client.sex,
+          pesel : client.pesel,
+          birthDate : year+'-'+month+'-'+day
+    }
+    console.log(address, newClient)
+    axios.post(url+"addresses/", address,{
+      headers:{
+        
+        "Access-Control-Allow-Origin": "*",
+        contentType: 'application/json'
+      },
+      
+    })
+    .then(function (response) {
+      const addres = response.data._links.address.href
+      console.log(addres)
+      newClient = {...newClient, address: addres, gym}
+      dispatch('addClient',newClient)
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
   },
   updateClient({commit, dispatch}, client){
     console.log(client.phoneNumber)
@@ -65,7 +120,6 @@ const actions = {
     .then(function (response) {
       commit('updateClient', client)
       console.log(response)
-      //dispatch('getClients',0)
     })
     .catch(function (error) {
       console.log(error);

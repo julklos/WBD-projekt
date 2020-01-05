@@ -44,11 +44,13 @@
                     id="input-group-1"
                     label="First name:"
                     label-for="input-1"
+                    
                   >
                     <b-form-input
                       id="input-1"
                       v-model="selected.name"
                       placeholder="Enter name"
+                      size = "sm"
                     ></b-form-input>
                   </b-form-group>
 
@@ -57,6 +59,7 @@
                       id="input-2"
                       v-model="selected.lastName"
                       required
+                      size = "sm"
                       placeholder="Enter last name"
                     ></b-form-input>
                   </b-form-group>
@@ -94,8 +97,10 @@
       <b-button  variant="warning" style="margin-left:1%" @click="deleteItem">Delete</b-button>
       </div>
     </b-modal>
-    <b-modal ref="add-modal" hide-footer title="Add new client">
+    <b-modal ref="add-modal" size="xl" hide-footer title="Add new client">
       <div class="d-block text-center">
+        <b-row>
+          <b-col cols = "6">
         <b-form  >
                       <b-form-group
                     id="input-group-1"
@@ -104,7 +109,7 @@
                   >
                     <b-form-input
                       id="input-1"
-                      v-model="newClient.first_name"
+                      v-model="newClient.name"
                       placeholder="Enter first name"
                     ></b-form-input>
                   </b-form-group>
@@ -112,25 +117,119 @@
                   <b-form-group id="input-group-2" label="Last name:" label-for="input-2">
                     <b-form-input
                       id="input-2"
-                      v-model="newClient.last_name"
+                      v-model="newClient.lastName"
                       required
                       placeholder="Enter last name"
                     ></b-form-input>
                   </b-form-group>
 
-                  <b-form-group id="input-group-3" label="Age:" label-for="input-3">
+                  <b-form-group id="input-group-3" label="Email:" label-for="input-3">
                     <b-form-input
                       id="input-3"
-                      v-model="newClient.age"
+                      v-model="newClient.email"
+                      required
+                       placeholder="Enter email"
+                      email
+                    ></b-form-input>
+                  </b-form-group>
+                  <b-form-group id="input-group-4" label="Phone number:" label-for="input-4">
+                    <b-form-input
+                      id="input-4"
+                      v-model="newClient.phoneNumber"
+                      placeholder="Enter phone number"
                       required
                     ></b-form-input>
                   </b-form-group>
+                  <b-form-group id="input-group-5" label="Pesel:" label-for="input-5">
+                    <b-form-input
+                      id="input-5"
+                      v-model="newClient.pesel"
+                      placeholder="Enter pesel"
+                    ></b-form-input>
+                    <b-form-group label="Sex">
+                    <b-form-radio-group id="radio-group-2" v-model="newClient.sex" name="radio-sub-component">
+                      <b-form-radio value="K">Female</b-form-radio>
+                      <b-form-radio value="M">Male</b-form-radio>
+                    </b-form-radio-group>
+                     </b-form-group>
+                  </b-form-group>
+                   <b-form-group id="input-group-5" label="Birth date:" label-for="input-5">
+                     <b-row>
+                       <b-col cols ="5">
+                    <b-form-select v-model="newClient.year" :options="year" size="s" class="mt-3">
+                      <template v-slot:first>
+                        <option :value="null" disabled>- Year -</option>
+                      </template>
+                    </b-form-select>
+                       </b-col>
+                       <b-col cols="3">
+                    <b-form-select v-model="newClient.month" :options="month" size="s" class="mt-3">
+                      <template v-slot:first>
+                        <option :value="null" disabled>- Month -</option>
+                      </template>
+                    </b-form-select>
+                       </b-col>
+                       <b-col cols = "3">
+                    <b-form-select v-model="newClient.day" :options="day" size="s" class="mt-3">
+                      <template v-slot:first>
+                        <option :value="null" disabled>- Day -</option>
+                      </template>
+                    </b-form-select>
+                       </b-col>
+                     </b-row>
+                  </b-form-group>
                 </b-form>
-      </div>
-      <div style="margin-left: 30%">
+          </b-col>
+
+          <b-col cols="6">
+            <b-form-group id="input-group-7" label="City:" label-for="input-7">
+                    <b-form-input
+                      id="input-7"
+                      v-model="newAddress.city"
+                       placeholder="Enter city"
+                    ></b-form-input>
+                  </b-form-group>
+                  <b-form-group id="input-group-8" label="Zip code:" label-for="input-8">
+                    <b-form-input
+                      id="input-8"
+                      v-model="newAddress.zipCode"
+                      placeholder="Enter zip code"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                  <b-form-group id="input-group-9" label="Adress:" >
+                    <b-row>
+                      <b-col cols="7">
+                    <b-form-input
+                      id="input-9"
+                      v-model="newAddress.street"
+                      placeholder="Enter street"
+                    ></b-form-input>
+                      </b-col>
+                       <b-col cols="3">
+                    <b-form-input
+                      id="input-9"
+                      v-model="newAddress.propertyNumber"
+                      placeholder="property no"
+                    ></b-form-input>
+                      </b-col>
+                       <b-col cols="2">
+                    <b-form-input
+                      id="input-9"
+                      v-model="newAddress.apartmentNumber"
+                      placeholder="apartment no"
+                    ></b-form-input>
+                      </b-col>
+                    </b-row>
+                              </b-form-group>
+                              <div style=" margin-top: 20%">
       <b-button  variant="secondary"  @click="hideModal('add-modal')">Cancel</b-button>
       <b-button  variant="warning" @click="addNewClient" style="margin-left:1%">Add</b-button>
        </div>
+          </b-col>
+
+        </b-row>
+      </div>
     </b-modal>
     </b-container>
   </div>
@@ -151,7 +250,20 @@ export default {
           phoneNumber: "",
           name: "",
           lastName: "",
-          email: ""
+          email: "",
+          sex : null,
+          pesel : "",
+          year: null,
+          month: null,
+          day: null,
+
+        },
+        newAddress: {
+          city : "",
+          zipCode : "",
+          street : "",
+          propertyNumber : "",
+          apartmentNumber : null,
         }
       }
     },
@@ -169,8 +281,34 @@ export default {
                 return element;
           });
         }
-
-
+      },
+      year() {
+        const thisYear = new Date().getFullYear()
+        let arr = []
+          for (var i = 1990; i < thisYear+1; i++) {
+             arr.push(i);
+             }
+        return arr;
+      },
+      month(){
+        let arr = []
+          for (var i = 1; i < 13; i++) {
+             arr.push(i);
+             }
+        return arr;
+      },
+      day(){
+          let arr = []
+          if((this.newClient.month!= null )&& (this.newClient.year!= null)){
+             const days =  new Date(this.newClient.year, this.newClient.month, 0).getDate()
+             console.log(days)
+          for (var i = 1; i < days+1; i++) {
+             arr.push(i);
+             }
+             console.log(arr)
+          }
+                 return arr;
+            
       },
        visibleCollapse(){
          return this.selected ? true: false
@@ -185,7 +323,7 @@ export default {
   },
    methods: {
      ...mapActions({
-        addClient: 'clients/addClient',
+        addAddress: 'clients/addAddress',
         deleteClient: 'clients/deleteClient',
         updateClient: 'clients/updateClient',
         getClients: 'clients/getClients'
@@ -209,16 +347,10 @@ export default {
       },
       hideModal(name) {
         this.$refs[name].hide()
-        if(name == 'add-modal'){
-          this.newClient.name = ""
-          this.newClient.lastName = ""
-          this.newClient.email = ""
-          this.newClient.phoneNumber = ""
-        }
       },
       addNewClient(event){
         event.preventDefault()
-        this.addClient(this.newClient)
+        this.addAddress({client: this.newClient, address: this.newAddress})
         this.hideModal('add-modal')
         
       }
