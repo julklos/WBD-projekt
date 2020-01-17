@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="background-color: grey">
   <worker-label></worker-label>
   <workouts-page v-if="page=='workouts'"></workouts-page>
   <trainers-page v-else-if="page=='trainers'"></trainers-page>

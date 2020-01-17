@@ -18,7 +18,8 @@ const state = {
     loading: false,
     error: null,
     gym: null,
-    page: null
+    page: null,
+    info: false
   }
   
   // getters
@@ -40,8 +41,25 @@ const state = {
   
     },
     changeProfile({commit}){
-      console.log(state)
-      commit('changeProfile')
+      axios.patch(state.user._links.self.href, {
+        name: state.user.name,
+        lastName: state.user.lastName,
+        phoneNumber: state.user.phoneNumber,
+        email: state.user.email,
+      }, {
+        headers:{
+          
+          "Access-Control-Allow-Origin": "*",
+          contentType: 'application/json'
+        },
+        
+      })
+      .then(function (response) {
+        commit('changeProfile')
+        console.log(response)
+      })
+    
+      
     },
     logout({commit}) {
         commit('logout');
@@ -78,7 +96,6 @@ const state = {
     getUserData({commit}, userData){
       const type = userData.type
       const id = userData.id.toString()
-      console.log(type, id)
       axios.get(url+type+'s/'+id, {
         headers:{
           
@@ -88,7 +105,6 @@ const state = {
       })
       .then(function (response) {
         //const clients = response.data._embedded
-        console.log(response.data)
         commit('setUserData',response.data)
       })
       .catch(function (error) {
@@ -106,13 +122,13 @@ const state = {
   // mutations
   const mutations = {
     setUserData (state, data) {
-      console.log(data)
       state.user = data
     },
     setGymInfo(state, data) {
       state.gym = data
     },
     setPage(state, data){
+      state.info = false
       state.page = data
     },
     resetPage(state){
@@ -135,7 +151,7 @@ const state = {
       state.loading = status
     },
     changeProfile(){
-
+      state.info = true
     }
   }
   

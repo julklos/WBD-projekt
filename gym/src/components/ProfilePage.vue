@@ -45,7 +45,9 @@
 
                   <div style="margin-left: 30%">
                   <b-button type="submit" variant="warning">Save changes</b-button>
+                  <span v-if="info" style="margin-left: 5%"> SAVED</span>
                   </div>
+                
         </b-form>
     </b-card-text>
   </b-card>
@@ -59,7 +61,8 @@ export default {
 
     computed: {...mapState({
    type: state => state.login.type,
-   user: state=>state.login.user
+   user: state=>state.login.user,
+   info: state=> state.login.info
 
   })},
   methods: {
@@ -84,7 +87,8 @@ export default {
 .profile-card {
     width: 90%;
     margin-left: 5%;
-    margin-top: 5%
+    margin-top: 5%;
+    color: grey;
 }
 .profile-frame{
     width: 50%;
