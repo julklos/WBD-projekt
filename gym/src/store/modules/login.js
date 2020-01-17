@@ -16,7 +16,9 @@ const state = {
     user: null,
     type: "worker",
     loading: false,
-    error: null
+    error: null,
+    gym: null,
+    page: null
   }
   
   // getters
@@ -37,8 +39,41 @@ const state = {
      }
   
     },
+    changeProfile({commit}){
+      console.log(state)
+      commit('changeProfile')
+    },
     logout({commit}) {
         commit('logout');
+    },
+    getGymInfo({commit}){
+      axios.get(url+"gyms", {
+        headers:{
+          
+          "Access-Control-Allow-Origin": "*",
+          contentType: 'application/json'
+        }
+      })
+      .then(function (response) {
+        //const clients = response.data._embedded
+        const link = response.data._embedded.gyms[0]._links.address.href
+       let data = response.data._embedded.gyms[0]
+        axios.get(link, {
+          headers:{
+            
+            "Access-Control-Allow-Origin": "*",
+            contentType: 'application/json'
+          }
+        })
+        .then(function(response){
+          data = {...data, "address": response.data}
+          commit('setGymInfo',data)
+        })
+       
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
     },
     getUserData({commit}, userData){
       const type = userData.type
@@ -53,18 +88,35 @@ const state = {
       })
       .then(function (response) {
         //const clients = response.data._embedded
+        console.log(response.data)
         commit('setUserData',response.data)
       })
       .catch(function (error) {
         console.log(error);
       })
+    },
+    setPage({commit}, name){
+      commit('setPage', name)
+    },
+    resetPage({commit}){
+      commit('resetPage')
     }
   }
   
   // mutations
   const mutations = {
     setUserData (state, data) {
+      console.log(data)
       state.user = data
+    },
+    setGymInfo(state, data) {
+      state.gym = data
+    },
+    setPage(state, data){
+      state.page = data
+    },
+    resetPage(state){
+      state.page = null
     },
   
     setUserType (state, data) {
@@ -81,6 +133,9 @@ const state = {
   
     setLoadingStatus (state, status) {
       state.loading = status
+    },
+    changeProfile(){
+
     }
   }
   

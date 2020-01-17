@@ -8,9 +8,9 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="#">Clients</b-nav-item>
-        <b-nav-item href="#" >Trainers</b-nav-item>
-        <b-nav-item href="#" >Workouts</b-nav-item>
+        <b-nav-item @click='setNewPage("clients")'>Clients</b-nav-item>
+        <b-nav-item @click='setNewPage("trainers")'>Trainers</b-nav-item>
+        <b-nav-item @click ='setNewPage("workouts")' >Workouts</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -20,7 +20,7 @@
           <template v-slot:button-content>
             <em>User</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item @click ='setNewPage("profile")'>Profile</b-dropdown-item>
           <b-dropdown-item href="#" @click="logOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -33,10 +33,14 @@ import {mapActions} from "vuex";
 export default {
  methods:{
     ...mapActions({
-      logout: "login/logout"
+      logout: "login/logout",
+      setPage: "login/setPage"
     }),
     logOut(){
       this.logout()
+    },
+    setNewPage(name){
+      this.setPage(name)
     }
  }
 }
