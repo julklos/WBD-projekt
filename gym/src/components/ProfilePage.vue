@@ -58,6 +58,7 @@
 <script>
 import {mapState,mapActions} from 'vuex'
 export default {
+  name: "ProfilePage",
 
     computed: {...mapState({
    type: state => state.login.type,
