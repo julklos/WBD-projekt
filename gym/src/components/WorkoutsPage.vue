@@ -66,8 +66,8 @@ export default {
       return formattedDates
     },
     selectedDates(){
-      console.log(this.dateOne)
-      this.getWorkouts({from: this.dateOne, to: this.dateTwo})
+      var second_date = moment(this.dateTwo).add(1, 'days').format('YYYY-MM-DD')
+      this.getWorkouts({from: this.dateOne, to: second_date})
 
     },
     cancelDates(){
