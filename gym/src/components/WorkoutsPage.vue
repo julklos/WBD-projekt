@@ -36,8 +36,9 @@
         :header="day"
         header-bg-variant="transparent"
         align="center"
+        
       >
-        <b-card-body>
+        <b-card-body style="padding: 0">
             <b-list-group>
       <b-list-group-item style="padding: 0" button @click="selectWorkout(workout)" v-for="workout in getDescription(day)" :key="workout.activity.name">
           {{getHour(workout.date)}}
@@ -58,7 +59,22 @@
   </b-card>
   </b-col>
   <b-col cols ="3">
-    OPIS
+    <b-card
+    style="margin-top: 7%"
+    v-if="selectedWorkout"
+      :header="selectedWorkout.date"
+     header-tag="selectedWorkout.activity.name"
+      :footer="'Instruktor: '+setEmployee()"
+      footer-tag="footer"
+      :title="selectedWorkout.activity.name"
+    >
+      <b-card-text>{{selectedWorkout.activity.description}}.
+          <br>
+          <b> Room: {{selectedWorkout.room.name}}</b> <br/>
+          <b> Free seats: {{selectedWorkout.activity.capacity -selectedWorkout.clients.length}}/{{selectedWorkout.activity.capacity}}</b>
+      </b-card-text>
+      <b-button v-if="type=='client'" :disabled="disabledButton" @click="signClientUp()" variant="warning">{{buttonText()}}</b-button>
+    </b-card>
   </b-col>
     </b-row>
   </div>
@@ -73,12 +89,15 @@ export default {
       dateOne: '',
       dateTwo: '',
       show: false,
-      selectedWorkout: null
+      selectedWorkout: null,
+      disabledButton: false
     }
   },
   computed: {...mapState({
    workouts: state => state.workouts.workouts,
-   loading: state => state.workouts.loading
+   loading: state => state.workouts.loading,
+   type: state =>state.login.type,
+   user: state=>state.login.user,
   }),
   workoutsDates(){
       let dates = this.workouts.map(el => moment(el.date).format("Do MMMM"))
@@ -88,7 +107,31 @@ export default {
   methods: {
     ...mapActions({
         getWorkouts: 'workouts/getWorkouts',
+        signUp: 'workouts/signUp'
     }),
+    signClientUp(){
+        this.signUp({workout: this.selectedWorkout, user: this.user})
+
+    },
+    buttonText(){
+        const status = this.selectedWorkout.clients.find(el=> {console.log(el._links.self.href, this.user._links.self.href)
+         return el._links.self.href === this.user._links.self.href})
+         if(status){
+             this.disabledButton= false
+         return "Sign up"
+         }
+         else{
+             this.disabledButton= true
+             return "Already signed up"
+         }
+        
+    },
+    setEmployee(){
+        if(this.selectedWorkout.employee.name)
+         return this.selectedWorkout.employee[0].name +' '+ this.selectedWorkout.employee[0].lastName
+        else
+        return "ZASTĘPSTWO"
+    },
     selectWorkout(workout){
         this.selectedWorkout = workout
     },
@@ -100,7 +143,6 @@ export default {
      return date===moment(work.date).format("Do MMMM")})
      },
      search(){
-         console.log('clicked')
          this.show = true
      },
     formatDates(dateOne, dateTwo) {
@@ -145,4 +187,5 @@ export default {
 .workouts-card{
   margin: 3%;
 }
+
 </style>

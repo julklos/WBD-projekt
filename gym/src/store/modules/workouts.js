@@ -6,7 +6,8 @@
 // shape: [{ id, quantity }]
 const state = {
     workouts: [],
-    loading: false
+    loading: false,
+    info: ""
   }
   
   // getters
@@ -16,6 +17,30 @@ const state = {
   
   // actions
   const actions = {
+    signUp({commit,state} ,info){
+        commit('setLoading', false)
+        console.log(state)
+        console.log('data',info.user)
+    //    const data = {
+    //        clients : info.user
+    //    }
+        axios.post(info.workout._links.clients.href, info.user,{
+            headers:{
+              
+              "Access-Control-Allow-Origin": "*",
+              contentType: 'application/json'
+            },
+            
+          })
+          .then(function (response) {
+              console.log(response)
+            commit('signedToActivity',info)
+           
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     getRoom({commit}, tempurl){
       axios.get(tempurl, {
         headers:{
@@ -164,6 +189,10 @@ setEmployee(state, data){
         employee: data.employee._embedded.employees
        }
 
+  },
+  signedToActivity(state, data){
+    const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == data.workout._links.self.href})
+    state.workouts[idx].clients.push(data.user)
   }
   
 }

@@ -34,6 +34,7 @@ const actions = {
       const self = response.data.page.number
       const total = response.data.page.totalPages
       commit('setClients',{clients,page})
+      console.log(state)
       if(self+1 < total)
         dispatch('getClients', self+1)
     })
