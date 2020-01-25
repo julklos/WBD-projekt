@@ -114,9 +114,10 @@ export default {
 
     },
     buttonText(){
-        const status = this.selectedWorkout.clients.find(el=> {console.log(el._links.self.href, this.user._links.self.href)
+        const status = this.selectedWorkout.clients.find(el=> {
          return el._links.self.href === this.user._links.self.href})
-         if(status){
+         console.log(status, this.selectedWorkout)
+         if(!status){
              this.disabledButton= false
          return "Sign up"
          }
