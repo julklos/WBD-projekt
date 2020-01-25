@@ -24,16 +24,17 @@ const state = {
     //    const data = {
     //        clients : info.user
     //    }
-        axios.post(info.workout._links.clients.href, info.user,{
+    console.log(info.workout._links.clients.href,info.user._links.self.href)
+        axios.post(info.user._links.self.href+'/classes',info.workout._links.self.href,{
             headers:{
               
               "Access-Control-Allow-Origin": "*",
-              contentType: 'application/json'
+              "Content-Type": 'text/uri-list'
             },
             
           })
           .then(function (response) {
-              console.log(response)
+              console.log('response',response)
             commit('signedToActivity',info)
            
           })
