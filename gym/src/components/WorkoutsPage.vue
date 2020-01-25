@@ -73,7 +73,7 @@
           <b> Room: {{selectedWorkout.room.name}}</b> <br/>
           <b> Free seats: {{selectedWorkout.activity.capacity -selectedWorkout.clients.length}}/{{selectedWorkout.activity.capacity}}</b>
       </b-card-text>
-      <b-button v-if="type=='client'" :disabled="disabledButton" @click="signClientUp()" variant="warning">{{buttonText()}}</b-button>
+      <b-button v-if="type=='client'"  @click="clickButton()" variant="warning">{{buttonText()}}</b-button>
     </b-card>
   </b-col>
     </b-row>
@@ -107,28 +107,28 @@ export default {
   methods: {
     ...mapActions({
         getWorkouts: 'workouts/getWorkouts',
-        signUp: 'workouts/signUp'
+        signUp: 'workouts/signUp',
+        checkOut: 'workouts/checkOutOfClass'
     }),
-    signClientUp(){
-        this.signUp({workout: this.selectedWorkout, user: this.user})
+    clickButton(){
+        this.disabledButton? this.checkOut({workout: this.selectedWorkout, user: this.user}):this.signUp({workout: this.selectedWorkout, user: this.user})
 
     },
     buttonText(){
         const status = this.selectedWorkout.clients.find(el=> {
          return el._links.self.href === this.user._links.self.href})
-         console.log(status, this.selectedWorkout)
          if(!status){
              this.disabledButton= false
          return "Sign up"
          }
          else{
              this.disabledButton= true
-             return "Already signed up"
+             return "Already signed up, check out of class"
          }
         
     },
     setEmployee(){
-        if(this.selectedWorkout.employee.name)
+        if(this.selectedWorkout.employee[0])
          return this.selectedWorkout.employee[0].name +' '+ this.selectedWorkout.employee[0].lastName
         else
         return "ZASTĘPSTWO"

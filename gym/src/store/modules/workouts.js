@@ -17,14 +17,8 @@ const state = {
   
   // actions
   const actions = {
-    signUp({commit,state} ,info){
+    signUp({commit} ,info){
         commit('setLoading', false)
-        console.log(state)
-        console.log('data',info.user)
-    //    const data = {
-    //        clients : info.user
-    //    }
-    console.log(info.workout._links.clients.href,info.user._links.self.href)
         axios.post(info.user._links.self.href+'/classes',info.workout._links.self.href,{
             headers:{
               
@@ -33,14 +27,34 @@ const state = {
             },
             
           })
-          .then(function (response) {
-              console.log('response',response)
+          .then(function () {
             commit('signedToActivity',info)
            
           })
           .catch(function (error) {
             console.log(error);
           })
+    },
+    checkOutOfClass({commit} ,info){
+        console.log(info)
+        const id = info.workout._links.self.href.split('/').pop()
+        console.log(id)
+        axios.delete(info.user._links.self.href+'/classes/'+id,{
+            headers:{
+              
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": 'text/uri-list'
+            },
+            
+          })
+          .then(function () {
+            commit('checkedOutOfActivity',info)
+           
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+
     },
     getRoom({commit}, tempurl){
       axios.get(tempurl, {
@@ -194,6 +208,11 @@ setEmployee(state, data){
   signedToActivity(state, data){
     const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == data.workout._links.self.href})
     state.workouts[idx].clients.push(data.user)
+  },
+  checkedOutOfActivity(state, data){
+    const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == data.workout._links.self.href})
+    const ide = state.workouts[idx].clients.findIndex(client=> {return client._links.self.href == data.user._links.self.href})
+    state.workouts[idx].clients.splice(ide, 1)
   }
   
 }
