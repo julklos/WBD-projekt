@@ -79,10 +79,11 @@ const state = {
                 workout: response.config.url
               }
               commit('setActivity',data)
+             
           })
     },
     getWorkouts({commit, dispatch}, dates){
-      console.log(dates);
+        commit('setLoading', true)
       axios.get(url+"classes/search/findByDateBetween", {
         params: {
             dateStart: dates.from,
@@ -98,11 +99,13 @@ const state = {
         const workouts = response.data._embedded.classes
         commit('getWorkouts',workouts)
         workouts.forEach(workout => {
+          dispatch('getActivity', workout._links.activity.href)
           dispatch('getRoom', workout._links.room.href)
           dispatch('getClients', workout._links.clients.href)
           dispatch('getEmployee', workout._links.employees.href)
-          dispatch('getActivity', workout._links.activity.href)
-        });
+        })
+        commit('setLoading', false);
+        console.log(state)
 
       })
       .catch(function (error) {
@@ -114,31 +117,36 @@ const state = {
   
   // mutations
   const mutations = {
+    setLoading(state, value){
+        console.log('loading', value)
+        state.loading = value
+    },
    getWorkouts(state, workouts){
      state.workouts = workouts
    },
    setActivity(state, data){
-    state.loading = true
-    console.log(data)
+
     const self = data.workout.replace("/activity", "");
    const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == self})
    state.workouts[idx] = {
      ...state.workouts[idx],
         activity: data.activity
        }
+
    },
    setRoom(state,data){
-     state.loading = true
+
      const self = data.workout.replace("/room", "");
     const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == self})
     state.workouts[idx] = {
       ...state.workouts[idx],
       room: data.room
+      
     }
 
    },
    setClients(state, data){
-    state.loading = true
+
     const self = data.workout.replace("/clients", "");
    const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == self})
    state.workouts[idx] = {
@@ -148,16 +156,16 @@ const state = {
 
     },
 setEmployee(state, data){
-    state.loading = true
-    console.log('employees',data)
+
     const self = data.workout.replace("/employees", "");
    const idx = state.workouts.findIndex(workout=> {return workout._links.self.href == self})
    state.workouts[idx] = {
      ...state.workouts[idx],
         employee: data.employee._embedded.employees
        }
-       console.log(state)
+
   }
+  
 }
   
   export default {
