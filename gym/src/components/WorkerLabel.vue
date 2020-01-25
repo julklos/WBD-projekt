@@ -9,7 +9,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item @click='setNewPage("clients")'>Clients</b-nav-item>
-        <b-nav-item @click='setNewPage("trainers")'>Trainers</b-nav-item>
+        <!-- <b-nav-item @click='setNewPage("trainers")'>Trainers</b-nav-item> -->
         <b-nav-item @click ='setNewPage("workouts")' >Workouts</b-nav-item>
       </b-navbar-nav>
 

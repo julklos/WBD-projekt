@@ -9,7 +9,6 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item @click='setNewPage("workouts")' >Workouts</b-nav-item>
-        <b-nav-item @click='setNewPage("carnets")' >Carnets</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

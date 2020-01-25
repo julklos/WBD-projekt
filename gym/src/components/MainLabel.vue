@@ -16,9 +16,7 @@
   @ok="handleOk">
      <b-form-input  v-model="email" type="email" placeholder="Enter your email"></b-form-input>
       <b-form-input  style="margin-top: 2%" v-model="password" type="password" placeholder="Enter your password"></b-form-input>
-       <b-form-invalid-feedback id="input-live-feedback">
-      Incorrect email or password.
-    </b-form-invalid-feedback>
+       <div v-if="nameState" style="color: red">Invalid data</div>
   </b-modal>
   </b-navbar>
 </template>
@@ -35,7 +33,7 @@ export default {
     },
     computed: mapState({
     // arrow functions can make the code very succinct!
-   // nameState: state => state.login.error
+   nameState: state => state.login.error
     }),
     methods:{
     ...mapActions({
@@ -44,7 +42,6 @@ export default {
   
         resetModal() {
         this.email = ''
-        this.nameState = null
         this.password =""
       },
       handleOk(bvModalEvt) {

@@ -123,6 +123,7 @@ const state = {
   const mutations = {
     setUserData (state, data) {
       state.user = data
+      state.error = null
     },
     setGymInfo(state, data) {
       state.gym = data
@@ -133,6 +134,7 @@ const state = {
     },
     resetPage(state){
       state.page = null
+      state.error = null
     },
   
     setUserType (state, data) {

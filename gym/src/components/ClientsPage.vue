@@ -222,6 +222,7 @@
                       </b-col>
                     </b-row>
                               </b-form-group>
+                              <div  style="color: red" v-if="error"> Missing or invalid data.</div>
                               <div style=" margin-top: 20%">
       <b-button  variant="secondary"  @click="hideModal('add-modal')">Cancel</b-button>
       <b-button  variant="warning" @click="addNewClient" style="margin-left:1%">Add</b-button>
@@ -270,7 +271,8 @@ export default {
     computed: {
       ...mapState({
     // arrow functions can make the code very succinct!
-    items: state => state.clients.clients
+    items: state => state.clients.clients,
+    error: state => state.clients.error
     }),
       filteredItems(){
         if(this.search == "")
@@ -285,7 +287,7 @@ export default {
       year() {
         const thisYear = new Date().getFullYear()
         let arr = []
-          for (var i = 1990; i < thisYear+1; i++) {
+          for (var i = 1900; i < thisYear+1; i++) {
              arr.push(i);
              }
         return arr;
@@ -351,7 +353,8 @@ export default {
       addNewClient(event){
         event.preventDefault()
         this.addAddress({client: this.newClient, address: this.newAddress})
-        this.hideModal('add-modal')
+       if(!this.error) 
+       this.hideModal('add-modal')
         
       }
     }

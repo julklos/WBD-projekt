@@ -6,7 +6,8 @@
 // shape: [{ id, quantity }]
 const state = {
   clients: null,
-  loading: false
+  loading: false,
+  error: false
 }
 
 // getters
@@ -55,31 +56,17 @@ const actions = {
     .then(function (response) {
       console.log(response)
       commit('addClient',client)
+      commit('setError', false)
      
     })
     .catch(function (error) {
+    commit('setError', true)
       console.log(error);
     })
 
   },
-  addAddress ({dispatch}, {client, address}) {
-
-    const year = client.year.toString()
-    let month = client.month.toString()
-    let day = client.day.toString()
-    if(day.length== 1)
-          day = "0"+day
-    if(month.length== 1)
-          month = "0"+month
-    let newClient = {
-      phoneNumber: client.phoneNumber,
-          name: client.name,
-          lastName: client.lastName,
-          email: client.email,
-          sex : client.sex,
-          pesel : client.pesel,
-          birthDate : year+'-'+month+'-'+day
-    }
+  addAddress ({commit,dispatch}, {client, address}) {
+    
 
     axios.post(url+"addresses/", address,{
       headers:{
@@ -90,13 +77,33 @@ const actions = {
       
     })
     .then(function (response) {
-      const addres = response.data._links.address.href
+            const year = client.year.toString()
+            let month = client.month.toString()
+            let day = client.day.toString()
+            if(day.length== 1)
+                  day = "0"+day
+            if(month.length== 1)
+                  month = "0"+month
+                  let newClient = {
+                    phoneNumber: client.phoneNumber,
+                        name: client.name,
+                        lastName: client.lastName,
+                        email: client.email,
+                        sex : client.sex,
+                        pesel : client.pesel,
+                        birthDate : year+'-'+month+'-'+day
+                  }
+                  const addres = response.data._links.address.href
       newClient = {...newClient, address: addres, gym}
+        
+      
       dispatch('addClient',newClient)
+      commit('setError', false)
      
     })
     .catch(function (error) {
       console.log(error);
+      commit('setError', true)
     })
   },
   updateClient({commit, dispatch}, client){
@@ -140,6 +147,7 @@ const actions = {
     })
     .catch(function (error) {
       console.log(error);
+
     })
   }
 }
@@ -162,6 +170,9 @@ const mutations = {
        state.clients[idx] = client;
 
      },
+     setError(state, err){
+        state.error = err
+     },
      deleteClient(state, client){
       let idx = state.clients.findIndex(el=> {return el._links.self.href == client._links.self.href})
       state.clients.splice(idx, 1);
@@ -175,26 +186,7 @@ const mutations = {
        state.clients = state.clients.concat(clients)
        }
      }
-  // pushProductToCart (state, { id }) {
-  //   state.items.push({
-  //     id,
-  //     quantity: 1
-  //   })
-  // },
-
-  // incrementItemQuantity (state, { id }) {
-  //   const cartItem = state.items.find(item => item.id === id)
-  //   cartItem.quantity++
-  // },
-
-  // setCartItems (state, { items }) {
-  //   state.items = items
-  // },
-
-  // setCheckoutStatus (state, status) {
-  //   state.checkoutStatus = status
-  // }
-}
+    }
 
 export default {
   namespaced: true,
